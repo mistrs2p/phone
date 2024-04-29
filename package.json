@@ -4,14 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "rimraf ./build && tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node build/phonebook.js"
+    "start": "npm run build && node build/phonebook.js",
+    "start:dev": "npx nodemon"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.12.7",
+    "nodemon": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }
 }
