@@ -8,17 +8,16 @@ interface PhoneBookEntry {
 
 const phoneBookFilePath = "phonebook.json";
 
-export function createPhoneBookEntry(): Promise<void> {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
+export const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
+export function createPhoneBookEntry(): Promise<string> {
   return new Promise((resolve, reject) => {
     rl.question("Enter ur number: ", (phoneNumber: string) => {
       rl.question("Enter ur name: ", (name: string) => {
         rl.close();
-
         const newEntry: PhoneBookEntry = {
           name,
           phoneNumber,
@@ -31,16 +30,20 @@ export function createPhoneBookEntry(): Promise<void> {
         );
 
         if (existingEntry) {
-          console.log(
-            "Error: the number is already exists in our Database :(("
+          // console.log(
+          //   "Error: the number is already exists in our Database :(("
+          // );
+          // console.log(`Name: ${existingEntry.name}`);
+          reject(
+            new Error(
+              `Error: the number is already exists in our Database :(( \nName: ${existingEntry.name}`
+            )
           );
-          console.log(`Name: ${existingEntry.name}`);
-          reject();
         } else {
           phoneBook.push(newEntry);
           savePhoneBook(phoneBook);
-          console.log("Your number successfully saved :))");
-          resolve();
+          // console.log("Your number successfully saved :))");
+          resolve("Your number successfully saved :))");
         }
       });
     });

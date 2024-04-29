@@ -1,11 +1,16 @@
 import { createPhoneBookEntry } from "./phoneBook";
 
 async function main() {
-  try {
-    await createPhoneBookEntry();
-  } catch (error) {
-    console.log("Error occured ", error);
-  }
+  const myCrete = await createPhoneBookEntry()
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(main);
+
+  console.log(myCrete);
 }
 
 main();
