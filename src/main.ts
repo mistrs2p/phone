@@ -1,4 +1,4 @@
-import { createPhoneBookEntry } from "./phoneBook";
+import { createPhoneBookEntry } from "./phonebook";
 
 async function main() {
   const myCrete = await createPhoneBookEntry()
