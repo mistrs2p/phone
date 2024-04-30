@@ -1,16 +1,18 @@
-import { createPhoneBookEntry } from "./phonebook";
+import { createPhoneBookEntry, loadPhonBook } from "./phonebook";
+
+export const phoneBook = loadPhonBook();
 
 async function main() {
   const myCrete = await createPhoneBookEntry()
     .then((response) => {
-      console.log(response);
+      console.log("response", response);
     })
     .catch((error) => {
-      console.log(error);
+      console.log("error", error);
     })
     .finally(main);
 
-  console.log(myCrete);
+  // console.log(myCrete);
 }
 
 main();
