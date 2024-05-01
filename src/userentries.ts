@@ -4,19 +4,36 @@ export const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+
 export async function getNumber(): Promise<string> {
   return await new Promise((resolve, reject) => {
-    rl.question("Enter ur number: ", (phoneNumber: string) => {
-      if (phoneNumber) {
-        resolve(phoneNumber);
-      } else reject("Error while getting phone number");
-    });
+    const askNumber = () => {
+      rl.question("Enter your phone number: ", async (phoneNumber: string) => {
+        if (phoneNumber) {
+          if (/^09.{9}$/i.test(phoneNumber)) {
+            resolve(phoneNumber);
+          } else {
+            console.log("Invalid phone number");
+            rl.question("Do you want to add your number?(y/n) ", (answer) => {
+              if (/^(y|yes)$/i.test(answer.toLowerCase())) {
+                askNumber();
+              } else {
+                console.log("Good Bye");
+                rl.close();
+                process.exit(0);
+              }
+            });
+          }
+        } else reject("Error while getting phone number");
+      });
+    };
+    askNumber();
   });
 }
 
 export async function getName(): Promise<string> {
   return await new Promise((resolve, reject) => {
-    rl.question("Enter ur name: ", (name: string) => {
+    rl.question("Enter your name: ", (name: string) => {
       if (name) {
         resolve(name);
       } else reject("Error while getting name");
