@@ -1,11 +1,7 @@
 import fs from "fs";
 import readline from "readline";
 import { phoneBook } from "./main";
-
-interface PhoneBookEntry {
-  name: string;
-  phoneNumber: string;
-}
+import { PhoneBookEntry } from "./interface";
 
 const phoneBookFilePath = "phonebook.json";
 
@@ -13,17 +9,12 @@ export const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-const phoneEntry: PhoneBookEntry = {
-  name: "",
-  phoneNumber: "",
-};
 
 async function getNumber(): Promise<string> {
   return await new Promise((resolve, reject) => {
     rl.question("Enter ur number: ", (phoneNumber: string) => {
       // phoneEntry.phoneNumber = phoneNumber;
       if (phoneNumber) {
-        phoneEntry.phoneNumber = phoneNumber;
         resolve(phoneNumber);
       } else reject("Error while getting phone number");
     });
@@ -35,23 +26,22 @@ async function getName(): Promise<string> {
     rl.question("Enter ur name: ", (name: string) => {
       // phoneEntry.name = name;
       if (name) {
-        phoneEntry.name = name;
         resolve(name);
       } else reject("Error while getting name");
     });
   });
 }
 
-function isExistingEntry(phoneNumber: string): Promise<Boolean> {
+function isExistingEntry(entry: PhoneBookEntry): Promise<Boolean> {
   return new Promise((resolve, reject) => {
     const existingEntry = phoneBook.find(
-      (entry) => entry.phoneNumber === phoneNumber
+      (entry) => entry.phoneNumber === entry.phoneNumber
     );
     console.log("existingEntry", existingEntry);
     if (existingEntry) {
       reject(
         new Error(
-          `the number is already exists in our Database :(( \nName: ${phoneEntry.name}`
+          `the number is already exists in our Database :(( \nName: ${entry.name}`
         )
       );
     } else {
@@ -63,21 +53,19 @@ function isExistingEntry(phoneNumber: string): Promise<Boolean> {
 
 export async function createPhoneBookEntry(): Promise<string> {
   return await new Promise(async (resolve, reject) => {
-    try {
-      await getName();
-      await getNumber();
+    const phoneEntry: PhoneBookEntry = {
+      name: await getName(),
+      phoneNumber: await getNumber(),
+    };
 
-      const isExistNumber = await isExistingEntry(phoneEntry.phoneNumber);
+    const isExistNumber = await isExistingEntry(phoneEntry);
 
-      if (isExistNumber === false) {
-        phoneBook.push(phoneEntry);
-        savePhoneBook(phoneBook);
-        resolve("Your number successfully saved :))");
-      } else {
-        reject();
-      }
-    } catch (error) {
-      reject(error);
+    if (isExistNumber === false) {
+      phoneBook.push(phoneEntry);
+      savePhoneBook(phoneBook);
+      resolve("Your number successfully saved :))");
+    } else {
+      reject();
     }
   });
 }
