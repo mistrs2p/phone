@@ -8,7 +8,6 @@ function isExistingEntry(phoneEntry: PhoneBookEntry): Promise<Boolean> {
     const existingEntry = phoneBook.find(
       (entry) => entry.phoneNumber === phoneEntry.phoneNumber
     );
-    console.log("existingEntry", existingEntry);
     if (existingEntry) {
       reject(
         new Error(
@@ -16,7 +15,6 @@ function isExistingEntry(phoneEntry: PhoneBookEntry): Promise<Boolean> {
         )
       );
     } else {
-      console.log("Number doesnt Existed");
       resolve(false);
     }
   });
@@ -39,6 +37,8 @@ export async function createPhoneBookEntry() {
       throw new Error("Error Occured");
     }
   } catch (err) {
-    console.log(err);
+    throw new Error(
+      `An error occured while creating phone book entry: \n${err}`
+    );
   }
 }
