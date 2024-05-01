@@ -13,7 +13,7 @@ export const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-let phoneEntry: PhoneBookEntry = {
+const phoneEntry: PhoneBookEntry = {
   name: "",
   phoneNumber: "",
 };
@@ -22,7 +22,10 @@ async function getNumber(): Promise<string> {
   return await new Promise((resolve, reject) => {
     rl.question("Enter ur number: ", (phoneNumber: string) => {
       // phoneEntry.phoneNumber = phoneNumber;
-      resolve(phoneNumber);
+      if (phoneNumber) {
+        phoneEntry.phoneNumber = phoneNumber;
+        resolve(phoneNumber);
+      } else reject("Error while getting phone number");
     });
   });
 }
@@ -31,80 +34,52 @@ async function getName(): Promise<string> {
   return await new Promise((resolve, reject) => {
     rl.question("Enter ur name: ", (name: string) => {
       // phoneEntry.name = name;
-      resolve(name);
+      if (name) {
+        phoneEntry.name = name;
+        resolve(name);
+      } else reject("Error while getting name");
     });
   });
 }
 
-async function isExistingEntry(phoneNumber: string): Promise<Boolean> {
-  return await new Promise((resolve, reject) => {
+function isExistingEntry(phoneNumber: string): Promise<Boolean> {
+  return new Promise((resolve, reject) => {
     const existingEntry = phoneBook.find(
       (entry) => entry.phoneNumber === phoneNumber
     );
-    if (!existingEntry) {
-      reject(false);
+    console.log("existingEntry", existingEntry);
+    if (existingEntry) {
+      reject(
+        new Error(
+          `the number is already exists in our Database :(( \nName: ${phoneEntry.name}`
+        )
+      );
     } else {
-      resolve(true);
+      console.log("Number doesnt Existed");
+      resolve(false);
     }
   });
 }
 
 export async function createPhoneBookEntry(): Promise<string> {
-  phoneEntry = {
-    phoneNumber: await getNumber(),
-    name: await getName(),
-  };
-  console.log(phoneEntry);
   return await new Promise(async (resolve, reject) => {
-    const isExistNumber = await isExistingEntry(phoneEntry.phoneNumber);
-    // rl.close();
+    try {
+      await getName();
+      await getNumber();
 
-    if (isExistNumber) {
-      reject(
-        new Error(
-          `Error: the number is already exists in our Database :(( \nName: ${phoneEntry.name}`
-        )
-      );
-    } else {
-      phoneBook.push(phoneEntry);
-      savePhoneBook(phoneBook);
-      resolve("Your number successfully saved :))");
+      const isExistNumber = await isExistingEntry(phoneEntry.phoneNumber);
+
+      if (isExistNumber === false) {
+        phoneBook.push(phoneEntry);
+        savePhoneBook(phoneBook);
+        resolve("Your number successfully saved :))");
+      } else {
+        reject();
+      }
+    } catch (error) {
+      reject(error);
     }
   });
-  // return new Promise((resolve, reject) => {
-  //   rl.question("Enter ur number: ", (phoneNumber: string) => {
-  //     rl.question("Enter ur name: ", (name: string) => {
-  //       rl.close();
-  //       const newEntry: PhoneBookEntry = {
-  //         name,
-  //         phoneNumber,
-  //       };
-
-  //       // If phone number is already exists
-  //       const phoneBook = loadPhonBook();
-  //       const existingEntry = phoneBook.find(
-  //         (entry) => entry.phoneNumber === phoneNumber
-  //       );
-
-  //       if (existingEntry) {
-  //         // console.log(
-  //         //   "Error: the number is already exists in our Database :(("
-  //         // );
-  //         // console.log(`Name: ${existingEntry.name}`);
-  //         reject(
-  //           new Error(
-  //             `Error: the number is already exists in our Database :(( \nName: ${existingEntry.name}`
-  //           )
-  //         );
-  //       } else {
-  //         phoneBook.push(newEntry);
-  //         savePhoneBook(phoneBook);
-  //         // console.log("Your number successfully saved :))");
-  //         resolve("Your number successfully saved :))");
-  //       }
-  //     });
-  //   });
-  // });
 }
 
 export function loadPhonBook(): PhoneBookEntry[] {
