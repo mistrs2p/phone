@@ -61,25 +61,23 @@ function isExistingEntry(phoneNumber: string): Promise<Boolean> {
   });
 }
 
-export async function createPhoneBookEntry(): Promise<string> {
-  return await new Promise(async (resolve, reject) => {
-    try {
-      await getName();
-      await getNumber();
+export async function createPhoneBookEntry()  {
+  try {
+    await getName();
+    await getNumber();
+    const isExistNumber = await isExistingEntry(phoneEntry.phoneNumber);
 
-      const isExistNumber = await isExistingEntry(phoneEntry.phoneNumber);
+    if (isExistNumber === false) {
+      phoneBook.push(phoneEntry);
+      savePhoneBook(phoneBook);
+      return "Your number successfully saved :))";
+    } else {
+      throw new Error("Error Occured");
 
-      if (isExistNumber === false) {
-        phoneBook.push(phoneEntry);
-        savePhoneBook(phoneBook);
-        resolve("Your number successfully saved :))");
-      } else {
-        reject();
-      }
-    } catch (error) {
-      reject(error);
     }
-  });
+  } catch(err) {
+    console.log(err)
+  }
 }
 
 export function loadPhonBook(): PhoneBookEntry[] {
