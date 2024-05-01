@@ -1,4 +1,3 @@
-// import { exit } from "process";
 import { createPhoneBookEntry } from "./phonebook";
 import { rl } from "./userentries";
 
@@ -10,10 +9,9 @@ async function main() {
     .catch((error) => {
       console.log("Main error => ", error);
     })
-    // .finally(main)
     .finally(() => {
       rl.question("R u want to continiue: ", (answer) => {
-        if (answer == "yes") {
+        if (/^(y|yes)$/i.test(answer.toLowerCase())) {
           main();
         } else {
           rl.close()
@@ -22,7 +20,6 @@ async function main() {
       });
     });
 
-  // console.log(myCrete);
 }
 
 main();
