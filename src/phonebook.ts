@@ -1,51 +1,12 @@
-import fs from "fs";
-import readline from "readline";
-import { phoneBook } from "./main";
+import { PhoneBookEntry } from "./interfaces";
+import { loadPhonBook, savePhoneBook } from "./storage";
+import { getName, getNumber } from "./userentries";
+const phoneBook = loadPhonBook();
 
-interface PhoneBookEntry {
-  name: string;
-  phoneNumber: string;
-}
-
-const phoneBookFilePath = "phonebook.json";
-
-export const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-const phoneEntry: PhoneBookEntry = {
-  name: "",
-  phoneNumber: "",
-};
-
-async function getNumber(): Promise<string> {
-  return await new Promise((resolve, reject) => {
-    rl.question("Enter ur number: ", (phoneNumber: string) => {
-      // phoneEntry.phoneNumber = phoneNumber;
-      if (phoneNumber) {
-        phoneEntry.phoneNumber = phoneNumber;
-        resolve(phoneNumber);
-      } else reject("Error while getting phone number");
-    });
-  });
-}
-
-async function getName(): Promise<string> {
-  return await new Promise((resolve, reject) => {
-    rl.question("Enter ur name: ", (name: string) => {
-      // phoneEntry.name = name;
-      if (name) {
-        phoneEntry.name = name;
-        resolve(name);
-      } else reject("Error while getting name");
-    });
-  });
-}
-
-function isExistingEntry(phoneNumber: string): Promise<Boolean> {
+function isExistingEntry(phoneEntry: PhoneBookEntry): Promise<Boolean> {
   return new Promise((resolve, reject) => {
     const existingEntry = phoneBook.find(
-      (entry) => entry.phoneNumber === phoneNumber
+      (entry) => entry.phoneNumber === phoneEntry.phoneNumber
     );
     console.log("existingEntry", existingEntry);
     if (existingEntry) {
@@ -61,11 +22,14 @@ function isExistingEntry(phoneNumber: string): Promise<Boolean> {
   });
 }
 
-export async function createPhoneBookEntry()  {
+export async function createPhoneBookEntry() {
   try {
-    await getName();
-    await getNumber();
-    const isExistNumber = await isExistingEntry(phoneEntry.phoneNumber);
+    const phoneEntry: PhoneBookEntry = {
+      name: await getName(),
+      phoneNumber: await getNumber(),
+    };
+
+    const isExistNumber = await isExistingEntry(phoneEntry);
 
     if (isExistNumber === false) {
       phoneBook.push(phoneEntry);
@@ -73,22 +37,8 @@ export async function createPhoneBookEntry()  {
       return "Your number successfully saved :))";
     } else {
       throw new Error("Error Occured");
-
     }
-  } catch(err) {
-    console.log(err)
+  } catch (err) {
+    console.log(err);
   }
-}
-
-export function loadPhonBook(): PhoneBookEntry[] {
-  try {
-    const data = fs.readFileSync(phoneBookFilePath, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    return [];
-  }
-}
-
-export function savePhoneBook(phoneBook: PhoneBookEntry[]): void {
-  fs.writeFileSync(phoneBookFilePath, JSON.stringify(phoneBook, null, 2));
 }

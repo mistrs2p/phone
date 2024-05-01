@@ -1,7 +1,6 @@
 // import { exit } from "process";
-import { createPhoneBookEntry, loadPhonBook, rl } from "./phonebook";
-
-export const phoneBook = loadPhonBook();
+import { createPhoneBookEntry } from "./phonebook";
+import { rl } from "./userentries";
 
 async function main() {
   await createPhoneBookEntry()
@@ -18,6 +17,7 @@ async function main() {
           main();
         } else {
           rl.close()
+          process.exit(0)
         }
       });
     });
