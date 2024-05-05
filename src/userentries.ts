@@ -1,11 +1,7 @@
-import readline from "readline";
+import { rl } from "./readline";
+import { phoneBook } from "./storage";
 
-export const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-export async function getNumber(): Promise<string> {
+export async function getPhoneNumber(): Promise<string> {
   return await new Promise((resolve, reject) => {
     const askNumber = () => {
       rl.question("Enter your phone number: ", async (phoneNumber: string) => {
@@ -35,6 +31,10 @@ export async function getName(): Promise<string> {
   return await new Promise((resolve, reject) => {
     rl.question("Enter your name: ", (name: string) => {
       if (name) {
+        const findPhoneEntry = phoneBook.find((entry) => entry.name == name);
+        if (findPhoneEntry)
+          console.log(`Found same name in data base with name: ${name}`);
+
         resolve(name);
       } else reject("Error while getting name");
     });

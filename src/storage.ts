@@ -2,7 +2,7 @@ import fs from "fs";
 import { PhoneBookEntry } from "./interfaces";
 import { phoneBookFilePath } from "./filepathes";
 
-export function loadPhonBook(): PhoneBookEntry[] {
+export function load(): PhoneBookEntry[] {
   try {
     const data = fs.readFileSync(phoneBookFilePath, "utf-8");
     return JSON.parse(data);
@@ -11,6 +11,10 @@ export function loadPhonBook(): PhoneBookEntry[] {
   }
 }
 
-export function savePhoneBook(phoneBook: PhoneBookEntry[]): void {
+export function save(phoneEntry: PhoneBookEntry): void {
+  phoneBook.push(phoneEntry);
+
   fs.writeFileSync(phoneBookFilePath, JSON.stringify(phoneBook, null, 2));
 }
+
+export const phoneBook = load();

@@ -1,8 +1,7 @@
 import { PhoneBookEntry } from "./interfaces";
-import { loadPhonBook, savePhoneBook } from "./storage";
-import { getName, getNumber } from "./userentries";
+import { save, phoneBook } from "./storage";
+import { getName, getPhoneNumber } from "./userentries";
 import { generateUniqueId } from "./uniqeid";
-const phoneBook = loadPhonBook();
 
 function isExistingEntryPhone(phoneEntry: PhoneBookEntry): Promise<Boolean> {
   return new Promise((resolve, reject) => {
@@ -39,21 +38,15 @@ export async function createPhoneBookEntry() {
     const phoneEntry: PhoneBookEntry = {
       id: generateUniqueId(),
       name: await getName(),
-      phoneNumber: await getNumber(),
+      phoneNumber: await getPhoneNumber(),
     };
 
-    const isExistName = await isExistingName(phoneEntry);
+    await isExistingName(phoneEntry);
     await isExistingEntryPhone(phoneEntry);
-    // const isExistNumber = await isExistingEntryPhone(phoneEntry);
-    if (isExistName)
-      console.log(`Found same name in data base with name: ${phoneEntry.name}`);
-    // if (isExistNumber === false) {
-    phoneBook.push(phoneEntry);
-    savePhoneBook(phoneBook);
+    
+    save(phoneEntry);
     return "Your number successfully saved :))";
-    // } else {
-    //   throw new Error("Phone number already exists!");
-    // }
+    
   } catch (err) {
     throw new Error(
       `An error occured while creating phone book entry: \n${err}`

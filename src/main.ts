@@ -1,7 +1,8 @@
 import { createPhoneBookEntry } from "./phonebook";
-import { rl } from "./userentries";
-async function main() {
-  await createPhoneBookEntry()
+import { rl } from "./readline";
+
+function main() {
+  createPhoneBookEntry()
     .then((response) => {
       console.log("response => ", response);
     })
@@ -17,7 +18,7 @@ async function main() {
           process.exit(0);
         }
       });
-    });
+    })
 }
 
 main();
