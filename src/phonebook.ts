@@ -43,16 +43,17 @@ export async function createPhoneBookEntry() {
     };
 
     const isExistName = await isExistingName(phoneEntry);
-    const isExistNumber = await isExistingEntryPhone(phoneEntry);
+    await isExistingEntryPhone(phoneEntry);
+    // const isExistNumber = await isExistingEntryPhone(phoneEntry);
     if (isExistName)
       console.log(`Found same name in data base with name: ${phoneEntry.name}`);
-    if (isExistNumber === false) {
-      phoneBook.push(phoneEntry);
-      savePhoneBook(phoneBook);
-      return "Your number successfully saved :))";
-    } else {
-      throw new Error("Error Occured");
-    }
+    // if (isExistNumber === false) {
+    phoneBook.push(phoneEntry);
+    savePhoneBook(phoneBook);
+    return "Your number successfully saved :))";
+    // } else {
+    //   throw new Error("Phone number already exists!");
+    // }
   } catch (err) {
     throw new Error(
       `An error occured while creating phone book entry: \n${err}`
