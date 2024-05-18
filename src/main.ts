@@ -1,7 +1,9 @@
 import { createPhoneBookEntry } from "./phonebook";
 import { rl } from "./readline";
+import { initDb } from "./db";
 
-function main() {
+async function main() {
+  await initDb();
   createPhoneBookEntry()
     .then((response) => {
       console.log("response => ", response);
