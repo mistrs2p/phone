@@ -1,5 +1,6 @@
 import { rl } from "./readline";
-import { phoneBook } from "./storage";
+// import { phoneBook } from "./storage";
+import { findEntryByName } from "./storage";
 
 export async function getPhoneNumber(): Promise<string> {
   return await new Promise((resolve, reject) => {
@@ -29,9 +30,9 @@ export async function getPhoneNumber(): Promise<string> {
 
 export async function getName(): Promise<string> {
   return await new Promise((resolve, reject) => {
-    rl.question("Enter your name: ", (name: string) => {
+    rl.question("Enter your name: ", async(name: string) => {
       if (name) {
-        const findPhoneEntry = phoneBook.find((entry) => entry.name == name);
+        const findPhoneEntry = await findEntryByName(name);
         if (findPhoneEntry)
           console.log(`Found same name in data base with name: ${name}`);
 
