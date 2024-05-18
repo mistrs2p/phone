@@ -1,20 +1,57 @@
-import fs from "fs";
 import { PhoneBookEntry } from "./interfaces";
-import { phoneBookFilePath } from "./filepathes";
+import { openDb } from "./db";
 
-export function load(): PhoneBookEntry[] {
+export async function load(): Promise<PhoneBookEntry[]> {
+  const db = await openDb();
   try {
-    const data = fs.readFileSync(phoneBookFilePath, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    return [];
+    const entries = await db.all<PhoneBookEntry[]>("SELECT * FROM phonebook");
+    return entries;
+  } finally {
+    await db.close();
   }
 }
 
-export function save(phoneEntry: PhoneBookEntry): void {
-  phoneBook.push(phoneEntry);
+export async function save(phoneEntry: PhoneBookEntry): Promise<void> {
+  const db = await openDb();
 
-  fs.writeFileSync(phoneBookFilePath, JSON.stringify(phoneBook, null, 2));
+  try {
+    await db.run(
+      "INSERT INTO phonebook (name, phoneNumber) VALUES (?, ?)",
+      phoneEntry.name,
+      phoneEntry.phoneNumber
+    );
+  } finally {
+    db.close();
+  }
 }
 
-export const phoneBook = load();
+export async function findEntryByPhoneNumber(
+  phoneNumber: string
+): Promise<PhoneBookEntry | null> {
+  const db = await openDb();
+  try {
+    const entry = await db.get<PhoneBookEntry>(
+      "SELECT * FROM phonebook WHERE phoneNumber = ?",
+      phoneNumber
+    );
+    return entry || null;
+  } finally {
+    db.close();
+  }
+}
+
+export async function findEntryByName(
+  name: string
+): Promise<PhoneBookEntry | null> {
+  const db = await openDb();
+
+  try {
+    const entry = await db.get<PhoneBookEntry>(
+      "SELECT * FROM phonebook WHERE name = ?",
+      name
+    );
+    return entry || null;
+  } finally {
+    db.close();
+  }
+}
