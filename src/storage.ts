@@ -1,57 +1,32 @@
 import { PhoneBookEntry } from "./interfaces";
-import { openDb } from "./db";
+import { initDb } from "./db";
+import { IStorageEngine } from "./interfaces";
+import {SQLiteStorageEngine} from './sqliteEngine'
+import { JSONStorageEngine } from "./jsonEngine";
+require('dotenv').config();
 
-export async function load(): Promise<PhoneBookEntry[]> {
-  const db = await openDb();
-  try {
-    const entries = await db.all<PhoneBookEntry[]>("SELECT * FROM phonebook");
-    return entries;
-  } finally {
-    await db.close();
+let storageEngine: IStorageEngine;
+
+export async function initStorageEngine() {
+  if (process.env.STORAGE_ENGINE === 'json') {
+    storageEngine = new JSONStorageEngine();
+  } else {
+    storageEngine = new SQLiteStorageEngine();
+    await initDb();
   }
+}
+export async function load(): Promise<PhoneBookEntry[]> {
+  return storageEngine.load();
 }
 
 export async function save(phoneEntry: PhoneBookEntry): Promise<void> {
-  const db = await openDb();
-
-  try {
-    await db.run(
-      "INSERT INTO phonebook (name, phoneNumber) VALUES (?, ?)",
-      phoneEntry.name,
-      phoneEntry.phoneNumber
-    );
-  } finally {
-    db.close();
-  }
+  return storageEngine.save(phoneEntry);
 }
 
-export async function findEntryByPhoneNumber(
-  phoneNumber: string
-): Promise<PhoneBookEntry | null> {
-  const db = await openDb();
-  try {
-    const entry = await db.get<PhoneBookEntry>(
-      "SELECT * FROM phonebook WHERE phoneNumber = ?",
-      phoneNumber
-    );
-    return entry || null;
-  } finally {
-    db.close();
-  }
+export async function findEntryByPhoneNumber(phoneNumber: string): Promise<PhoneBookEntry | null> {
+  return storageEngine.findEntryByPhoneNumber(phoneNumber);
 }
 
-export async function findEntryByName(
-  name: string
-): Promise<PhoneBookEntry | null> {
-  const db = await openDb();
-
-  try {
-    const entry = await db.get<PhoneBookEntry>(
-      "SELECT * FROM phonebook WHERE name = ?",
-      name
-    );
-    return entry || null;
-  } finally {
-    db.close();
-  }
+export async function findEntryByName(name: string): Promise<PhoneBookEntry | null> {
+  return storageEngine.findEntryByName(name);
 }
