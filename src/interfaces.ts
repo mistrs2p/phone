@@ -3,3 +3,11 @@ export interface PhoneBookEntry {
   name: string;
   phoneNumber: string;
 }
+
+
+export interface IStorageEngine {
+  load(): Promise<PhoneBookEntry[]>;
+  save(phoneEntry: PhoneBookEntry): Promise<void>;
+  findEntryByPhoneNumber(phoneNumber: string): Promise<PhoneBookEntry | null>;
+  findEntryByName(name: string): Promise<PhoneBookEntry | null>;
+}
