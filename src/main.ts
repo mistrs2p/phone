@@ -1,13 +1,11 @@
 import { createPhoneBookEntry } from "./phonebook";
 import { rl } from "./readline";
-// import { initDb } from "./db";
 import { initStorageEngine } from "./storage";
 
 require('dotenv').config();
 
 async function main() {
   await initStorageEngine();
-  // await initDb();
   createPhoneBookEntry()
     .then((response) => {
       console.log("response => ", response);
