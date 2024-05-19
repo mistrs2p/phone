@@ -1,20 +1,29 @@
 import sqlite3 from "sqlite3";
-import { open } from "sqlite";
 
 export async function openDb() {
-  return open({
-    filename: "phonebook.db",
-    driver: sqlite3.Database,
-  });
+  return new sqlite3.Database("phonebook.db");
 }
 
 export async function initDb() {
   const db = await openDb();
-  await db.exec(`
-    CREATE TABLE IF NOT EXISTS phonebook (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      phoneNumber TEXT NOT NULL UNIQUE
-    )
-  `);
+  db.serialize(() => {
+    db.run(
+      `
+      CREATE TABLE IF NOT EXISTS phonebook (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        phoneNumber TEXT NOT NULL UNIQUE
+      )
+    `,
+      (err) => {
+        if (err) {
+          console.error("Error creating table:", err.message);
+        } else {
+          console.log("\nPhonebook table created or already exists.");
+        }
+      }
+    );
+  });
+
+  return db;
 }
