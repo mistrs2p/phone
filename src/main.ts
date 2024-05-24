@@ -1,5 +1,5 @@
-import { createPhoneBookEntry } from "./phonebook";
-import { rl } from "./readline";
+import { createPhoneBookEntry } from "./services/phonebook";
+import { rl } from "./utils/readline";
 import { initStorageEngine } from "./storage";
 
 require('dotenv').config();

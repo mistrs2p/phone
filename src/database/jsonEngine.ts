@@ -1,13 +1,13 @@
 
-import { IStorageEngine, PhoneBookEntry } from "./interfaces";
-import { phoneBookFilePath } from "./filepathes";
+import { IStorageEngine, PhoneBookEntry, IPhoneBookLookup } from "../interfaces/inedx";
+import { phoneBookFilePath } from "../config/filepathes";
 import fs from 'fs'
-export class JSONStorageEngine implements IStorageEngine {
+export class JSONStorageEngine implements IStorageEngine, IPhoneBookLookup {
     async load(): Promise<PhoneBookEntry[]> {
       try {
-        if (!fs.existsSync(phoneBookFilePath)) {
-          fs.writeFileSync(phoneBookFilePath, JSON.stringify([]));
-        }
+        // if (!fs.existsSync(phoneBookFilePath)) {
+        //   fs.writeFileSync(phoneBookFilePath, JSON.stringify([]));
+        // }
         const data = fs.readFileSync(phoneBookFilePath, 'utf8');
         const entries: PhoneBookEntry[] = data ? JSON.parse(data) : [];
         return entries;
