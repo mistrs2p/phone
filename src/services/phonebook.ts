@@ -1,6 +1,7 @@
 // phonebook.ts
-import { PhoneBookEntry } from "../interfaces/inedx";
-import { save, findEntryByPhoneNumber, findEntryByName } from "../storage";
+import { PhoneBookEntry } from "../interfaces";
+import { findEntryByName, findEntryByPhoneNumber } from "../lookup";
+import { save } from "../storage";
 import { getName, getPhoneNumber } from "./userentries";
 
 async function isExistingEntryPhone(
@@ -15,10 +16,10 @@ async function isExistingEntryPhone(
   return false;
 }
 
-async function isExistingName(phoneEntry: PhoneBookEntry): Promise<Boolean> {
-  const existingName = await findEntryByName(phoneEntry.name);
-  return !!existingName;
-}
+// async function isExistingName(phoneEntry: PhoneBookEntry): Promise<Boolean> {
+//   const existingName = await findEntryByName(phoneEntry.name);
+//   return !!existingName;
+// }
 
 export async function createPhoneBookEntry() {
   try {
@@ -29,7 +30,7 @@ export async function createPhoneBookEntry() {
       phoneNumber,
     };
 
-    await isExistingName(phoneEntry);
+    // await isExistingName(phoneEntry);
     await isExistingEntryPhone(phoneEntry);
 
     await save(phoneEntry);
