@@ -5,9 +5,13 @@ import { initLookupEngine } from "./lookup";
 
 require('dotenv').config();
 
-async function main() {
+async function initializeEngines(): Promise<void> {
   await initStorageEngine();
   await initLookupEngine()
+}
+
+async function main() {
+  await initializeEngines();
   createPhoneBookEntry()
     .then((response) => {
       console.log("response => ", response);
