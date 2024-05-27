@@ -1,6 +1,5 @@
 import { rl } from "../utils/readline";
-// import { phoneBook } from "../storage";
-import { findEntryByName } from "../storage";
+import { findEntryByName } from "../lookup";
 
 export async function getPhoneNumber(): Promise<string> {
   return await new Promise((resolve, reject) => {

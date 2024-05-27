@@ -1,5 +1,5 @@
 
-import { IStorageEngine, IPhoneBookLookup, PhoneBookEntry } from "../interfaces/inedx";
+import { IStorageEngine, PhoneBookEntry } from "../interfaces";
 import { openDb } from "./db";
 
 export class SQLiteStorageEngine implements IStorageEngine {

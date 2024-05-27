@@ -1,5 +1,5 @@
 // sqliteLookup.ts
-import { IPhoneBookLookup, PhoneBookEntry } from "../interfaces/inedx";
+import { IPhoneBookLookup, PhoneBookEntry } from "../interfaces";
 import { openDb } from "../database/db";
 
 export class SQLiteLookup implements IPhoneBookLookup {

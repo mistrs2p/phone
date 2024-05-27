@@ -1,5 +1,5 @@
 // jsonLookup.ts
-import { IPhoneBookLookup, PhoneBookEntry } from "../interfaces/inedx";
+import { IPhoneBookLookup, PhoneBookEntry } from "../interfaces";
 import { phoneBookFilePath } from "../config/filepathes";
 import fs from "fs";
 

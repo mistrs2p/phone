@@ -1,4 +1,4 @@
-import { IStorageEngine, PhoneBookEntry } from "../interfaces/inedx";
+import { IStorageEngine, PhoneBookEntry } from "../interfaces";
 import { phoneBookFilePath } from "../config/filepathes";
 import fs from "fs";
 export class JSONStorageEngine implements IStorageEngine {
