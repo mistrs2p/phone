@@ -23,3 +23,7 @@ export async function load(): Promise<PhoneBookEntry[]> {
 export async function save(phoneEntry: PhoneBookEntry): Promise<void> {
   return storageEngine.save(phoneEntry);
 }
+
+export async function find(type: string, entry: string): Promise<PhoneBookEntry | null> {
+  return storageEngine.find(type, entry);
+}
