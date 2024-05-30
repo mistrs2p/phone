@@ -1,13 +1,11 @@
 import { createPhoneBookEntry } from "./services/phonebook";
 import { rl } from "./utils/readline";
 import { initStorageEngine } from "./storage";
-import { initLookupEngine } from "./lookup";
 
-require('dotenv').config();
+require("dotenv").config();
 
 async function initializeEngines(): Promise<void> {
   await initStorageEngine();
-  await initLookupEngine()
 }
 
 async function main() {
@@ -28,7 +26,7 @@ async function main() {
           process.exit(0);
         }
       });
-    })
+    });
 }
 
 main();
