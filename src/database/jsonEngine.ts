@@ -1,4 +1,4 @@
-import { IStorageEngine, PhoneBookEntry } from "../interfaces";
+import { IStorageEngine, PhoneBookEntry, FindType } from "../interfaces";
 import { phoneBookFilePath } from "../config/filepathes";
 import fs from "fs";
 export class JSONStorageEngine implements IStorageEngine {
@@ -24,6 +24,23 @@ export class JSONStorageEngine implements IStorageEngine {
       console.log("Entry saved.");
     } catch (error) {
       console.error("Error saving entry:", error);
+      throw error;
+    }
+  }
+
+  async find(type: FindType, entry: string): Promise<PhoneBookEntry | null> {
+    try {
+      const entries = await this.load();
+      switch(type){
+        case "name":
+          return entries.find((findEntry) => entry == findEntry.name) || null;
+        case "phoneNumber":
+          return entries.find((findEntry) => entry == findEntry.phoneNumber) || null;
+        default:
+          return null;
+      }
+    } catch (error) {
+      console.error("Error finding entry:", error);
       throw error;
     }
   }

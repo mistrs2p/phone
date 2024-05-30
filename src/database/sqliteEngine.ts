@@ -1,6 +1,5 @@
-import { IStorageEngine, PhoneBookEntry } from "../interfaces";
+import { IStorageEngine, PhoneBookEntry, FindType } from "../interfaces";
 import { openDb } from "./db";
-
 export class SQLiteStorageEngine implements IStorageEngine {
   async load(): Promise<PhoneBookEntry[]> {
     const db = await openDb();
@@ -43,6 +42,34 @@ export class SQLiteStorageEngine implements IStorageEngine {
       console.log("Entry saved.");
     } catch (error) {
       console.error("Error saving entry:", error);
+      throw error;
+    } finally {
+      db.close();
+    }
+  }
+
+
+  async find(type: FindType, entry: string): Promise<PhoneBookEntry | null> {
+    const db = await openDb();
+    try {
+      const findEntry = await new Promise<PhoneBookEntry | null>(
+        (resolve, reject) => {
+          db.get(
+            `SELECT * FROM phonebook WHERE ${type} =?`,
+            [entry],
+            (err, row: PhoneBookEntry | null) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(row || null);
+              }
+            }
+          );
+        }
+      );
+      return findEntry;
+    } catch (error) {
+      console.error("Error finding entry:", error);
       throw error;
     } finally {
       db.close();
