@@ -4,12 +4,10 @@ export interface PhoneBookEntry {
   phoneNumber: string;
 }
 
+export type FindType = "name" | "phoneNumber";
+
 export interface IStorageEngine {
   load(): Promise<PhoneBookEntry[]>;
   save(phoneEntry: PhoneBookEntry): Promise<void>;
-}
-
-export interface IPhoneBookLookup {
-  findEntryByPhoneNumber(phoneNumber: string): Promise<PhoneBookEntry | null>;
-  findEntryByName(name: string): Promise<PhoneBookEntry | null>;
+  find(type: string, entry: string): Promise<PhoneBookEntry | null>;
 }
