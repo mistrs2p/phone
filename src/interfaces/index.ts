@@ -7,6 +7,7 @@ export interface PhoneBookEntry {
 export type FindType = "name" | "phoneNumber";
 
 export interface IStorageEngine {
+  init(): Promise<void>;
   load(): Promise<PhoneBookEntry[]>;
   save(phoneEntry: PhoneBookEntry): Promise<void>;
   find(type: string, entry: string): Promise<PhoneBookEntry | null>;
