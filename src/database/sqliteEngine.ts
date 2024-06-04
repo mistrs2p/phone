@@ -1,6 +1,10 @@
 import { IStorageEngine, PhoneBookEntry, FindType } from "../interfaces";
-import { openDb } from "./db";
+import { openDb, initDb } from "./db";
 export class SQLiteStorageEngine implements IStorageEngine {
+  async init(): Promise<void> {
+    console.log("SQLITE storage engine SETUP");
+    await initDb();
+  }
   async load(): Promise<PhoneBookEntry[]> {
     const db = await openDb();
     try {
@@ -47,7 +51,6 @@ export class SQLiteStorageEngine implements IStorageEngine {
       db.close();
     }
   }
-
 
   async find(type: FindType, entry: string): Promise<PhoneBookEntry | null> {
     const db = await openDb();
