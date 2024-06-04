@@ -6,6 +6,13 @@ export async function getPhoneNumber(): Promise<string> {
       rl.question("Enter your phone number: ", async (phoneNumber: string) => {
         if (phoneNumber) {
           if (/^09.{9}$/i.test(phoneNumber)) {
+            const existingEntry = await find("phoneNumber", phoneNumber);
+            console.log("existingEntry", existingEntry);
+            if (existingEntry) {
+              reject(
+                `The number already exists in our database :(( \nName: ${existingEntry.name}`
+              );
+            }
             resolve(phoneNumber);
           } else {
             console.log("Invalid phone number");
@@ -28,9 +35,9 @@ export async function getPhoneNumber(): Promise<string> {
 
 export async function getName(): Promise<string> {
   return await new Promise((resolve, reject) => {
-    rl.question("Enter your name: ", async(name: string) => {
+    rl.question("Enter your name: ", async (name: string) => {
       if (name) {
-        const findPhoneEntry = await find('name', name);
+        const findPhoneEntry = await find("name", name);
         if (findPhoneEntry)
           console.log(`Found same name in data base with name: ${name}`);
 
