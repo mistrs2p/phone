@@ -1,25 +1,7 @@
 // phonebook.ts
 import { PhoneBookEntry } from "../interfaces";
-import { find, save } from "../storage";
+import {  save } from "../storage";
 import { getName, getPhoneNumber } from "./userentries";
-
-async function isExistingEntryPhone(
-  phoneEntry: PhoneBookEntry
-): Promise<Boolean> {
-  const existingEntry = await find("phoneNumber", phoneEntry.phoneNumber);
-  console.log("existingEntry", existingEntry);
-  if (existingEntry) {
-    throw new Error(
-      `The number already exists in our database :(( \nName: ${existingEntry.name}`
-    );
-  }
-  return false;
-}
-
-// async function isExistingName(phoneEntry: PhoneBookEntry): Promise<Boolean> {
-//   const existingName = await findEntryByName(phoneEntry.name);
-//   return !!existingName;
-// }
 
 export async function createPhoneBookEntry() {
   try {
@@ -29,9 +11,6 @@ export async function createPhoneBookEntry() {
       name,
       phoneNumber,
     };
-
-    // await isExistingName(phoneEntry);
-    await isExistingEntryPhone(phoneEntry);
 
     await save(phoneEntry);
     return "Your number successfully saved :))";
