@@ -1,5 +1,4 @@
 // storage.ts
-import { initDb } from "../database/db";
 import { PhoneBookEntry, IStorageEngine } from "../interfaces";
 import { SQLiteStorageEngine } from "../database/sqliteEngine";
 import { JSONStorageEngine } from "../database/jsonEngine";
@@ -8,22 +7,28 @@ require("dotenv").config();
 let storageEngine: IStorageEngine;
 
 export async function initStorageEngine() {
-  if (process.env.STORAGE_ENGINE === "json") {
-    storageEngine = new JSONStorageEngine();
-  } else {
-    storageEngine = new SQLiteStorageEngine();
-    await initDb();
+  switch (process.env.STORAGE_ENGINE) {
+    case "json":
+      storageEngine = new JSONStorageEngine();
+      break;
+    case "sqlite":
+      storageEngine = new SQLiteStorageEngine();
+      break;
   }
+  storageEngine.init();
 }
 
 export async function load(): Promise<PhoneBookEntry[]> {
-  return storageEngine.load();
+  return await storageEngine.load();
 }
 
 export async function save(phoneEntry: PhoneBookEntry): Promise<void> {
-  return storageEngine.save(phoneEntry);
+  return await storageEngine.save(phoneEntry);
 }
 
-export async function find(type: string, entry: string): Promise<PhoneBookEntry | null> {
-  return storageEngine.find(type, entry);
+export async function find(
+  type: string,
+  entry: string
+): Promise<PhoneBookEntry | null> {
+  return await storageEngine.find(type, entry);
 }
