@@ -4,12 +4,8 @@ import { initStorageEngine } from "./storage";
 
 require("dotenv").config();
 
-async function initializeEngines(): Promise<void> {
-  await initStorageEngine();
-}
-
 async function main() {
-  await initializeEngines();
+  await initStorageEngine();
   createPhoneBookEntry()
     .then((response) => {
       console.log("response => ", response);
