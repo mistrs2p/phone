@@ -5,15 +5,15 @@ require("dotenv").config();
 
 export class JSONStorageEngine implements IStorageEngine {
 
-  constructor(private path:string = process.env.JSON_PATH!) {
+  constructor(private path:string = process.env.JSON_PATH!, protected data: Array<PhoneBookEntry> = []) {
     if (!this.path) {
       throw new Error("JSON_PATH is not defined in environment variables.");
     }
   }
 
   async init(): Promise<void> {
+    this.data = await this.load();
     console.log("JSON storage engine SETUP");
-    return  
   }
   async load(): Promise<PhoneBookEntry[]> {
     try {
@@ -31,9 +31,8 @@ export class JSONStorageEngine implements IStorageEngine {
 
   async save(phoneEntry: PhoneBookEntry): Promise<void> {
     try {
-      const entries = await this.load();
-      entries.push(phoneEntry);
-      fs.writeFileSync(this.path, JSON.stringify(entries, null, 2));
+      this.data.push(phoneEntry);
+      fs.writeFileSync(this.path, JSON.stringify(this.data, null, 2));
       console.log("Entry saved.");
     } catch (error) {
       console.error("Error saving entry:", error);
@@ -43,15 +42,7 @@ export class JSONStorageEngine implements IStorageEngine {
 
   async find(type: FindType, entry: string): Promise<PhoneBookEntry | null> {
     try {
-      const entries = await this.load();
-      switch(type){
-        case "name":
-          return entries.find((findEntry) => entry == findEntry.name) || null;
-        case "phoneNumber":
-          return entries.find((findEntry) => entry == findEntry.phoneNumber) || null;
-        default:
-          return null;
-      }
+      return this.data.find((findEntry) => entry == findEntry[type]) || null;
     } catch (error) {
       console.error("Error finding entry:", error);
       throw error;
