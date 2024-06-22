@@ -2,12 +2,15 @@
 import { PhoneBookEntry, IStorageEngine } from "../interfaces";
 import { SQLiteStorageEngine } from "../database/sqliteEngine";
 import { JSONStorageEngine } from "../database/jsonEngine";
-require("dotenv").config();
+import {engineAndPath} from "../main" 
+
+
+// require("dotenv").config();
 
 let storageEngine: IStorageEngine;
 
 export async function initStorageEngine() {
-  switch (process.env.STORAGE_ENGINE) {
+  switch (engineAndPath.engine) {
     case "json":
       storageEngine = new JSONStorageEngine();
       break;

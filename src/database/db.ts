@@ -1,8 +1,10 @@
 import sqlite3 from "sqlite3";
 import { readFileSync } from "fs";
 import { join } from "path";
+import {engineAndPath} from "../main" 
+
 export async function openDb() {
-  return new sqlite3.Database("phonebook.db");
+  return new sqlite3.Database(engineAndPath.path);
 }
 
 export async function initDb() {

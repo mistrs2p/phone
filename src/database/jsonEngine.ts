@@ -1,11 +1,12 @@
 import { IStorageEngine, PhoneBookEntry, FindType } from "../interfaces";
 import fs from "fs";
-require("dotenv").config();
+import {engineAndPath} from "../main" 
+// require("dotenv").config();
 
 
 export class JSONStorageEngine implements IStorageEngine {
 
-  constructor(private path:string = process.env.JSON_PATH!, protected data: Array<PhoneBookEntry> = []) {
+  constructor(private path:string = engineAndPath.path!, protected data: Array<PhoneBookEntry> = []) {
     if (!this.path) {
       throw new Error("JSON_PATH is not defined in environment variables.");
     }
