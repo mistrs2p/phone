@@ -12,3 +12,8 @@ export interface IStorageEngine {
   save(phoneEntry: PhoneBookEntry): Promise<void>;
   find(type: string, entry: string): Promise<PhoneBookEntry | null>;
 }
+
+export interface EnginePath {
+  path: string,
+  engine: string
+}
