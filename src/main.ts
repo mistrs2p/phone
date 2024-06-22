@@ -12,16 +12,16 @@ program
   .option("-e, --engine <type>", "set storage engine (json or sqlite)", "json")
   .option("-p, --path <path>", "set path for JSON storage", "phonebook.json")
   .action((options) => {
-    console.log(process.env);
+    // console.log(process.env);
 
     if (!("JSON_PATH" in process.env)) {
-      // throw new Error("An error occurred while geting JSON PATH Address");
-      console.log("An error occurred while geting JSON PATH Address");
+      // throw new Error("An error occurred while geting JSON PATH Address; Make sure you have environment file or directory or spell checking");
+      console.log("An error occurred while geting JSON PATH Address; Make sure you have environment file or directory or spell checking");
       process.exit(1);
     }
     if (!("STORAGE_ENGINE" in process.env)) {
-      // throw new Error("An error occurred while geting JSON Engin Address");
-      console.log("An error occurred while geting JSON Engin Address");
+      // throw new Error("An error occurred while geting JSON Engin Address; Make sure you have environment file or directory or spell checking");
+      console.log("An error occurred while geting JSON Engin Address; Make sure you have environment file or directory or spell checking");
       process.exit(1);
     }
 
@@ -32,7 +32,7 @@ program
   });
 
 program.parse(process.argv);
-
+console.log("process.argv", process.argv);
 // const options = program.opts();
 // console.log(options);
 async function main() {
