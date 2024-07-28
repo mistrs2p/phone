@@ -13,12 +13,14 @@ const program = new Command();
 
 program
   .version("1.0.0")
-  .option("-eng, --engine <engine>", "set storage engine (json or sqlite)")
+  .option(
+    "-eng, --engine <engine>",
+    "set storage engine (json or sqlite)",
+    "json"
+  )
   .option("-p, --path <path>", "set path for JSON storage", "phonebook")
-  .action((options, r) => {
+  .action((options, _) => {
     console.log(options);
-    console.log(r);
-    // console.log(options)
     switch (options.engine) {
       case "json":
         engineAndPath.path = options.path + ".json";
@@ -27,7 +29,11 @@ program
         engineAndPath.path = options.path + ".db";
         break;
       default:
-        throw new Error("Unknown engine: " + options.engine + ". Please specify the right engine");
+        throw new Error(
+          "Unknown engine: " +
+            options.engine +
+            ". Please specify the right engine"
+        );
     }
     engineAndPath.engine = options.engine;
     console.log(engineAndPath);
