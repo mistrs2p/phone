@@ -28,6 +28,9 @@ program
       case "sqlite":
         engineAndPath.path = options.path + ".db";
         break;
+
+        case "mysql":
+        break;
       default:
         throw new Error(
           "Unknown engine: " +
