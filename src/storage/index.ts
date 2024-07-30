@@ -2,8 +2,8 @@
 import { PhoneBookEntry, IStorageEngine } from "../interfaces";
 import { SQLiteStorageEngine } from "../database/sqliteEngine";
 import { JSONStorageEngine } from "../database/jsonEngine";
-import {engineAndPath} from "../main" 
-
+import { mysqlStorageEngine } from "../database/mysqlEngine";
+import { engineAndPath } from "../main";
 
 // require("dotenv").config();
 
@@ -16,6 +16,9 @@ export async function initStorageEngine() {
       break;
     case "sqlite":
       storageEngine = new SQLiteStorageEngine();
+      break;
+    case "mysql":
+      storageEngine = new mysqlStorageEngine();
       break;
   }
   storageEngine.init();
