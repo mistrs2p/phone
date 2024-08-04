@@ -1,21 +1,21 @@
 # Use Node.js LTS version as base image
-FROM node
+FROM node:22.5.1-alpine3.19
 
 # Set working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR ./
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install
 
 # Bundle app source
 COPY . .
 
+# Install dependencies
+RUN npm install
+
 # Build TypeScript
-RUN npm run build
+# RUN npm run build
 
 # Expose the port your app runs on
-EXPOSE 3000
+# EXPOSE 3000
 
 # Command to run your app using nodemon for development
 CMD ["npm", "run", "start:dev", "--", "-eng", "mysql"]
