@@ -1,27 +1,27 @@
 // storage.ts
 import { PhoneBookEntry, IStorageEngine } from "../interfaces";
-// import { SQLiteStorageEngine } from "../database/sqliteEngine";
-// import { JSONStorageEngine } from "../database/jsonEngine";
+import { SQLiteStorageEngine } from "../database/sqliteEngine";
+import { JSONStorageEngine } from "../database/jsonEngine";
 import { mysqlStorageEngine } from "../database/mysqlEngine";
-// import { engineAndPath } from "../main";
+import { engineAndPath } from "../main";
 
-// require("dotenv").config();
+require("dotenv").config();
 
 let storageEngine: IStorageEngine;
 
 export async function initStorageEngine() {
-  // switch (engineAndPath.engine) {
-  //   case "json":
-  //     storageEngine = new JSONStorageEngine();
-  //     break;
-  //   case "sqlite":
-  //     storageEngine = new SQLiteStorageEngine();
-  //     break;
-  //   case "mysql":
-  //     storageEngine = new mysqlStorageEngine();
-  //     break;
-  // }
-  storageEngine = new mysqlStorageEngine();
+  switch (engineAndPath.engine) {
+    case "json":
+      storageEngine = new JSONStorageEngine();
+      break;
+    case "sqlite":
+      storageEngine = new SQLiteStorageEngine();
+      break;
+    case "mysql":
+      storageEngine = new mysqlStorageEngine();
+      break;
+  }
+  // storageEngine = new mysqlStorageEngine();
 
   storageEngine.init();
 }

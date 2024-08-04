@@ -4,7 +4,7 @@ import { initStorageEngine } from "./storage";
 import { Command } from "commander";
 import { EnginePath } from "./interfaces";
 
-// require("dotenv").config();
+require("dotenv").config();
 export const engineAndPath: EnginePath = {
   path: "",
   engine: "",
@@ -28,7 +28,7 @@ program
         engineAndPath.path = options.path + ".db";
         break;
 
-        case "mysql":
+      case "mysql":
         break;
       default:
         throw new Error(

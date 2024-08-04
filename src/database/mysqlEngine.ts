@@ -1,5 +1,5 @@
 import mysql from "mysql2/promise";
-import { RowDataPacket } from 'mysql2';
+import { RowDataPacket } from "mysql2";
 
 import { IStorageEngine, PhoneBookEntry, FindType } from "../interfaces";
 
@@ -16,14 +16,16 @@ export async function openDb(retries = 5, delay = 5000) {
       // console.log(connection)
       return connection;
     } catch (error) {
-      console.error(`Failed to connect to MySQL. Retrying in ${delay / 1000} seconds...`);
+      console.error(
+        `Failed to connect to MySQL. Retrying in ${delay / 1000} seconds...`
+      );
       console.error(`${retries} attemps to connect to MySQL`);
-      console.error('________________________________')
+      console.error("________________________________");
       retries -= 1;
-      await new Promise(res => setTimeout(res, delay));
+      await new Promise((res) => setTimeout(res, delay));
     }
   }
-  throw new Error('Could not connect to MySQL');
+  throw new Error("Could not connect to MySQL");
 }
 
 export async function initDb() {
@@ -88,7 +90,7 @@ export class mysqlStorageEngine implements IStorageEngine {
         `SELECT * FROM phonebook WHERE ?? = ?`,
         [type, entry]
       );
-      const findEntry = rows.length > 0 ? rows[0] as PhoneBookEntry : null;
+      const findEntry = rows.length > 0 ? (rows[0] as PhoneBookEntry) : null;
       return findEntry;
     } catch (error) {
       console.error("Error finding entry:", error);
