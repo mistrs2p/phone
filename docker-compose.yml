@@ -1,5 +1,4 @@
 services:
-  
   mysql:
     image: mysql
     container_name: mysql_container
@@ -13,18 +12,22 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
-  app:
-    build: .
-    container_name: phonebook-app
-    # ports:
-    #   - "3000:3000"
-    volumes:
-      - ./src:/usr/src/app/src
-      - ./nodemon.json:/usr/src/app/nodemon.json
-      - ./package.json:/usr/src/app/package.json
-      - ./package-lock.json:/usr/src/app/package-lock.json
-      - ./tsconfig.json:/usr/src/app/tsconfig.json
- 
+  myApp:
+    image: my-phone-app
+    depends_on:
+      - mysql
+
+  # app:
+  #   build: .
+  #   container_name: phonebook-app
+  #   # ports:
+  #   #   - "3000:3000"
+  #   volumes:
+  #     - ./src:/usr/src/app/src
+  #     - ./nodemon.json:/usr/src/app/nodemon.json
+  #     - ./package.json:/usr/src/app/package.json
+  #     - ./package-lock.json:/usr/src/app/package-lock.json
+  #     - ./tsconfig.json:/usr/src/app/tsconfig.json
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -37,10 +40,9 @@ services:
       - "8080:80"
     depends_on:
       - mysql
-    
+
 volumes:
   mysql_data:
 
 networks:
   my_app_network:
-
