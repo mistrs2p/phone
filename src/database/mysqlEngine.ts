@@ -3,15 +3,27 @@ import { RowDataPacket } from 'mysql2';
 
 import { IStorageEngine, PhoneBookEntry, FindType } from "../interfaces";
 
-export async function openDb() {
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "Mahdi",
-    password: "mahdiPassword2",
-    database: "mydatabase",
-    port: 3307,
-  });
-  return connection;
+export async function openDb(retries = 5, delay = 5000) {
+  while (retries) {
+    try {
+      const connection = await mysql.createConnection({
+        host: "mysql",
+        user: "Mahdi",
+        password: "mahdiPassword2",
+        database: "mydatabase",
+        port: 3306,
+      });
+      // console.log(connection)
+      return connection;
+    } catch (error) {
+      console.error(`Failed to connect to MySQL. Retrying in ${delay / 1000} seconds...`);
+      console.error(`${retries} attemps to connect to MySQL`);
+      console.error('________________________________')
+      retries -= 1;
+      await new Promise(res => setTimeout(res, delay));
+    }
+  }
+  throw new Error('Could not connect to MySQL');
 }
 
 export async function initDb() {
