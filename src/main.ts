@@ -20,7 +20,6 @@ program
   )
   .option("-p, --path <path>", "set path for JSON storage", "phonebook")
   .action((options, _) => {
-    console.log(options);
     switch (options.engine) {
       case "json":
         engineAndPath.path = options.path + ".json";
