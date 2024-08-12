@@ -1,55 +1,51 @@
-import { createPhoneBookEntry } from "./services/phonebook";
+import {
+  createPhoneBookEntry,
+  displayPhoneBookEntries,
+} from "./services/phonebook";
 import { rl } from "./utils/readline";
-import { initStorageEngine } from "./storage";
 import { Command } from "commander";
-import { EnginePath } from "./interfaces";
+import initialize from "./services/initializeApp";
 
 require("dotenv").config();
-export const engineAndPath: EnginePath = {
-  path: "",
-  engine: "",
-};
+
 const program = new Command();
 
+program.version("2.0.0", "-v, --version", "output the current version");
+
 program
-  .version("1.0.0")
+  .command("create")
+  .description("Create a new phonebook entry")
   .option(
     "-eng, --engine <engine>",
-    "set storage engine (json or sqlite)",
+    "set storage engine (json or sqlite or mysql)",
     "json"
   )
-  .option("-p, --path <path>", "set path for JSON storage", "phonebook")
-  .action((options, _) => {
-    switch (options.engine) {
-      case "json":
-        engineAndPath.path = options.path + ".json";
-        break;
-      case "sqlite":
-        engineAndPath.path = options.path + ".db";
-        break;
-
-      case "mysql":
-        break;
-      default:
-        throw new Error(
-          "Unknown engine: " +
-            options.engine +
-            ". Please specify the right engine"
-        );
-    }
-    engineAndPath.engine = options.engine;
-    console.log(engineAndPath);
-
-    main();
+  .option("-p, --path <path>", "set path for database", "phonebook")
+  .action(async (options, _) => {
+    console.log("options", options);
+    await initialize(options);
+    keepAdding();
   });
 
+program
+  .command("display")
+  .description("Display all phonebook entries")
+  .option(
+    "-eng, --engine <engine>",
+    "get storage engine (json or sqlite or mysql)",
+    "json"
+  )
+  .option("-p, --path <path>", "get path for database", "phonebook")
+  .action(async (options) => {
+    console.log(options);
+    await initialize(options);
+    await displayPhoneBookEntries();
+    process.exit(0);
+  });
 program.parse(process.argv);
-// console.log("process.argv", process.argv);
-// const options = program.opts();
-// console.log(options);
-async function main() {
-  await initStorageEngine();
-  createPhoneBookEntry()
+
+async function keepAdding() {
+  await createPhoneBookEntry()
     .then((response) => {
       console.log("response => ", response);
     })
@@ -59,7 +55,7 @@ async function main() {
     .finally(() => {
       rl.question("Do you want to continiue: ", (answer) => {
         if (/^(y|yes)$/i.test(answer.toLowerCase())) {
-          main();
+          keepAdding();
         } else {
           rl.close();
           process.exit(0);
