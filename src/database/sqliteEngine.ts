@@ -2,7 +2,7 @@ import { IStorageEngine, PhoneBookEntry, FindType } from "../interfaces";
 import sqlite3 from "sqlite3";
 import { readFileSync } from "fs";
 import { join } from "path";
-import {engineAndPath} from "../main" 
+import {engineAndPath} from "../services/configureEngine" 
 
 export async function openDb() {
   return new sqlite3.Database(engineAndPath.path);

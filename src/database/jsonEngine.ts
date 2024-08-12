@@ -1,6 +1,6 @@
 import { IStorageEngine, PhoneBookEntry, FindType } from "../interfaces";
 import fs from "fs";
-import {engineAndPath} from "../main" 
+import {engineAndPath} from "../services/configureEngine" 
 // require("dotenv").config();
 
 

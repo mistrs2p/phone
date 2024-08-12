@@ -3,7 +3,7 @@ import { PhoneBookEntry, IStorageEngine } from "../interfaces";
 import { SQLiteStorageEngine } from "../database/sqliteEngine";
 import { JSONStorageEngine } from "../database/jsonEngine";
 import { mysqlStorageEngine } from "../database/mysqlEngine";
-import { engineAndPath } from "../main";
+import { engineAndPath } from "../services/configureEngine";
 
 require("dotenv").config();
 
