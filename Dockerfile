@@ -2,8 +2,7 @@
 FROM node:22.5.1-alpine3.19
 
 # Set working directory inside the container
-WORKDIR ./
-
+WORKDIR .
 
 # Bundle app source
 COPY . .
@@ -18,4 +17,4 @@ RUN npm install
 # EXPOSE 3000
 
 # Command to run your app using nodemon for development
-CMD ["npm", "run", "start:dev", "--", "-eng", "mysql"]
+CMD ["npm", "run", "start:dev"]
