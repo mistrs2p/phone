@@ -11,23 +11,27 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    # networks:
+    #   - phonebook_network
 
-  myApp:
-    image: my-phone-app
+  # phonebook:
+  #   image: node-phonebook
+  #   depends_on:
+  #     - mysql
+
+  phonebook:
+    build: .
+    container_name: phonebook_app
+    command: ["npm", "run", "start:dev", "--", "-eng", "mysql"]
+    environment:
+      - NODE_ENV=development
     depends_on:
       - mysql
-
-  # app:
-  #   build: .
-  #   container_name: phonebook-app
-  #   # ports:
-  #   #   - "3000:3000"
-  #   volumes:
-  #     - ./src:/usr/src/app/src
-  #     - ./nodemon.json:/usr/src/app/nodemon.json
-  #     - ./package.json:/usr/src/app/package.json
-  #     - ./package-lock.json:/usr/src/app/package-lock.json
-  #     - ./tsconfig.json:/usr/src/app/tsconfig.json
+    volumes:
+      - .:/app
+    # networks:
+    #   - phonebook_network
+    # tty: true  # Keep the container alive
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -40,9 +44,12 @@ services:
       - "8080:80"
     depends_on:
       - mysql
+    # networks:
+    #   - phonebook_network
 
 volumes:
   mysql_data:
 
 networks:
-  my_app_network:
+  phonebook_network:
+    driver: bridge
