@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf ./build && tsc",
+    "build": "rimraf ./build && tsc && npm run copy-files",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && node build/main.js",
+    "start": "npm run build && node build/main.js ",
+    "copy-files": "copyfiles -u 1 src/**/*.{sql,json} build/",
     "start:dev": "npx nodemon"
   },
   "keywords": [],
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "commander": "^12.1.0",
+    "copyfiles": "^2.4.1",
     "dotenv": "^16.4.5",
     "mysql2": "^3.11.0",
     "sqlite3": "^5.1.7"
